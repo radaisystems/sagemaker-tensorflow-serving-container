@@ -55,6 +55,15 @@ function parse_std_args() {
         shift
         shift
         ;;
+        -h|--hub_user)
+        hub_user="$2"
+        shift
+        shift
+        ;;
+        -p|--push)
+        push=1
+        shift
+        ;;
         *) # unknown option
         error "unknown option: $1"
         shift
@@ -71,5 +80,3 @@ function parse_std_args() {
 
     true
 }
-
-
