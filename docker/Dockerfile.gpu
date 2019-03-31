@@ -17,10 +17,14 @@ ENV CUDNN_VERSION=7.4.2.24
 ENV TF_TENSORRT_VERSION=5.0.2
 ENV LIBNVINFER_VERSION=5
 
+ENV AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+ENV AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+ENV AWS_REGION=us-west-2
+
 LABEL com.amazonaws.sagemaker.capabilities.accept-bind-to-port=true
 
 COPY --from=tfs /usr/bin/tensorflow_model_server /usr/bin/tensorflow_model_server
-# COPY models /opt/ml/model/export/Servo/1/
+COPY models /opt/ml/model/export/Servo/1/
 
 
 RUN \
@@ -79,7 +83,7 @@ ENV SAGEMAKER_SAFE_PORT_RANGE=9000-9999
 RUN apt-get -y install --no-install-recommends python3-setuptools
 RUN pip3 --no-cache-dir install --upgrade awscli
 
-RUN aws s3 cp s3://juno-production/1553805501/variables/variables.data-00000-of-00001_863cb673080abef6834c7fea4ac96e5f59e9ea086610b80b4e2ecc976bbcdc2c_560494552 /opt/ml/model/export/Servo/1/ctap/variables
-RUN aws s3 cp s3://juno-production/1553805501/variables/variables.index_5fa6a03134e6f415217c786057518b8c7f0e21f1afbc0fa2f50172af5816312b_23259 /opt/ml/model/export/Servo/1/ctap/variables
-RUN aws s3 cp s3://juno-production/1553805501/saved_model.pbtxt_fa58d42a251698d3415559c9fec990bcaac1f7a99f6e39fad8c0b4494799514b_20651483 /opt/ml/model/export/Servo/1/ctap/saved_model.pb
+# RUN aws s3 mv s3://juno-production/1553805501/variables/variables.data-00000-of-00001_863cb673080abef6834c7fea4ac96e5f59e9ea086610b80b4e2ecc976bbcdc2c_560494552 /opt/ml/model/export/Servo/1/ctap/variables.data
+# RUN aws s3 mv s3://juno-production/1553805501/variables/variables.index_5fa6a03134e6f415217c786057518b8c7f0e21f1afbc0fa2f50172af5816312b_23259 /opt/ml/model/export/Servo/1/ctap/variables.index
+# RUN aws s3 mv s3://juno-production/1553805501/saved_model.pbtxt_fa58d42a251698d3415559c9fec990bcaac1f7a99f6e39fad8c0b4494799514b_20651483 /opt/ml/model/export/Servo/1/ctap/saved_model.pb
 
