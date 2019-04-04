@@ -19,6 +19,22 @@ function error() {
     exit 1
 }
 
+function get_tfs_executable() {
+    if [[ -z $(aws s3 ls 's3://amazonei-tensorflow/Tensorflow Serving/v'${short_version}'/Ubuntu/') ]]; then
+        echo 'ERROR: cannot find this version in S3 bucket.'
+        exit 1
+    fi
+
+    zip_file=$(aws s3 ls 's3://amazonei-tensorflow/Tensorflow Serving/v'${short_version}'/Ubuntu/' | awk '{print $4}')
+    aws s3 cp 's3://amazonei-tensorflow/Tensorflow Serving/v'${short_version}'/Ubuntu/'${zip_file} .
+
+    mkdir exec_dir
+    unzip ${zip_file} -d exec_dir
+
+    find . -name amazonei_tensorflow_model_server -exec mv {} container/ \;
+    rm ${zip_file} && rm -rf exec_dir
+}
+
 function parse_std_args() {
     # defaults
     arch='cpu'
@@ -55,6 +71,10 @@ function parse_std_args() {
 }
 
 parse_std_args "$@"
+
+if [ $arch = 'eia' ]; then
+    get_tfs_executable
+fi
 
 for i in "${versions[@]}"
 do

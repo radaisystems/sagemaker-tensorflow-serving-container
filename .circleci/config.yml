@@ -49,6 +49,18 @@ jobs:
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             ./scripts/docker_hub.sh --hub_user "$DOCKERHUB_USERNAME" --push --arch gpu | cat
 
+  publish-eia:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            ./scripts/docker_hub.sh --hub_user "$DOCKERHUB_USERNAME" --push --arch eia | cat
+
 
 workflows:
   version: 2
