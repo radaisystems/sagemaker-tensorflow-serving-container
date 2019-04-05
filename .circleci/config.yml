@@ -25,6 +25,18 @@ jobs:
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             ./scripts/docker_hub.sh --hub_user "$DOCKERHUB_USERNAME" --arch gpu | cat
 
+  build-eia:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            ./scripts/docker_hub.sh --hub_user "$DOCKERHUB_USERNAME" --arch eia | cat
+
   publish-cpu:
     docker:
       - image: circleci/buildpack-deps:stretch
@@ -75,6 +87,10 @@ workflows:
           filters:
             branches:
               ignore: master
+      - build-eia:
+          filters:
+            branches:
+              ignore: master
 
   build_master:
     jobs:
@@ -83,6 +99,10 @@ workflows:
             branches:
               only: master
       - publish-gpu:
+          filters:
+            branches:
+              only: master
+      - publish-eia:
           filters:
             branches:
               only: master
@@ -102,6 +122,10 @@ workflows:
             branches:
               only: master
       - publish-gpu:
+          filters:
+            branches:
+              only: master
+      - publish-eia:
           filters:
             branches:
               only: master
