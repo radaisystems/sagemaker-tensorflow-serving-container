@@ -72,15 +72,16 @@ function parse_std_args() {
 
 parse_std_args "$@"
 
-if [ $arch = 'eia' ]; then
-    get_tfs_executable
-fi
-
 for i in "${versions[@]}"
 do
+
    full_version=$(get_full_version $i)
    short_version=$(get_short_version $i)
    version_check="$(echo $short_version |tr -d '.' )"
+
+   if [ $arch = 'eia' ]; then
+       get_tfs_executable
+   fi
 
    if [[ "$version_check" == 'nightly' ]] || [[ $version_check -ge 113 ]]; then
      cuda_version=10.0
