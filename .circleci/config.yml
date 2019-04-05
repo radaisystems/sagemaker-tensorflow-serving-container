@@ -1,4 +1,12 @@
-version: 2
+version: 2.1
+commands:
+  install_aws_cli:
+    steps:
+      - run:
+          name: Install AWS CLI
+          command: |
+            sudo apt-get -y install python-pip
+            sudo pip install awscli --upgrade
 
 jobs:
   build-cpu:
@@ -31,6 +39,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - install_aws_cli
       - run:
           name: Build Docker image
           command: |
@@ -67,6 +76,7 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
+      - install_aws_cli
       - run:
           name: Publish Docker Image to Docker Hub
           command: |
