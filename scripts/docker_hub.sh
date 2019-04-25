@@ -69,7 +69,7 @@ do
      cudnn_version=7.3.0.29
      tf_tensorrt_version=5.0.2
      libnvinfer_version=5
-     libnvinfer_tf_tensorrt_version=5.1.2
+     libnvinfer_tf_tensorrt_version=5.0.2
    else
      cuda_version=9.0
      cuda_version_dash=9-0
